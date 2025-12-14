@@ -42,7 +42,7 @@ echo ====================================
 echo   Opening browser...
 echo ====================================
 echo.
-start http://localhost:5173
+start http://localhost:5173 
 
 echo.
 echo ====================================
