@@ -5,22 +5,27 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# OpenRouter API key
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+# GitHub Personal Access Token
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
-# Council members - list of OpenRouter model identifiers
+# Council members - list of GitHub Models identifiers
 COUNCIL_MODELS = [
-    "openai/gpt-5.1",
-    "google/gemini-3-pro-preview",
-    "anthropic/claude-sonnet-4.5",
-    "x-ai/grok-4",
+    "GPT-4.1",                              # OpenAI's latest - best overall
+    "DeepSeek-R1",                          # DeepSeek reasoning model
+    "Llama-3.3-70B-Instruct",               # Meta's powerful 70B model
+    "Grok-3",      
+    "GPT-4.1",                              # OpenAI's latest - best overall
+    "gpt-4o",                              # OpenAI's latest - best overall
+    "gpt-4o-mini",                            # xAI's flagship model
 ]
 
-# Chairman model - synthesizes final response
-CHAIRMAN_MODEL = "google/gemini-3-pro-preview"
 
-# OpenRouter API endpoint
-OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+# Chairman model - synthesizes final response
+CHAIRMAN_MODEL = "GPT-4.1"
+
+# GitHub Models API endpoint
+GITHUB_MODELS_API_URL = "https://models.inference.ai.azure.com/chat/completions"
 
 # Data directory for conversation storage
 DATA_DIR = "data/conversations"
