@@ -9,22 +9,32 @@ echo   Starting LLM Council...
 echo ====================================
 echo.
 
-:: Start backend server
-echo [1/3] Starting backend on http://localhost:8001...
-start "LLM Council - Backend" cmd /k "uv run python -m backend.main"
+:: Get current directory
+set "CURRENT_DIR=%CD%"
 
-:: Wait for backend to initialize
-echo [2/3] Waiting for backend to initialize...
-timeout /t 3 /nobreak >nul
-
-:: Start frontend server
-echo [3/3] Starting frontend on http://localhost:5173...
-cd frontend
-start "LLM Council - Frontend" cmd /k "npm run dev"
-cd ..
-
-:: Wait a moment for frontend to start
-timeout /t 2 /nobreak >nul
+:: Check if Windows Terminal is available
+where wt.exe >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo Using Windows Terminal with tabs...
+    echo.
+    
+    :: Start Windows Terminal with two tabs
+    start "" wt.exe new-tab --title "Backend (8001)" --suppressApplicationTitle -d "%CURRENT_DIR%" cmd /k "uv run python -m backend.main" ; new-tab --title "Frontend (5173)" --suppressApplicationTitle -d "%CURRENT_DIR%\frontend" cmd /k "npm run dev"
+    
+    :: Wait for servers to start
+    echo Waiting for servers to initialize...
+    timeout /t 5 /nobreak >nul
+    
+) else (
+    echo Windows Terminal not found, using separate windows...
+    echo.
+    
+    :: Fallback to separate minimized windows
+    start /min "Backend (8001)" cmd /k "uv run python -m backend.main"
+    timeout /t 3 /nobreak >nul
+    start /min "Frontend (5173)" cmd /k "cd frontend && npm run dev"
+    timeout /t 2 /nobreak >nul
+)
 
 :: Open browser
 echo.
@@ -42,10 +52,11 @@ echo.
 echo   Backend:  http://localhost:8001
 echo   Frontend: http://localhost:5173
 echo.
-echo   Two command windows opened:
-echo   - Backend server (Python/FastAPI)
-echo   - Frontend server (Vite)
+echo   Check Windows Terminal tabs:
+echo   - Tab 1: Backend server
+echo   - Tab 2: Frontend server
 echo.
-echo   Close those windows to stop the servers.
+echo   This window will close in 3 seconds...
 echo.
-pause
+timeout /t 3 /nobreak >nul
+exit
